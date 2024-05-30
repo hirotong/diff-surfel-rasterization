@@ -3,7 +3,7 @@
 # GRAPHDECO research group, https://team.inria.fr/graphdeco
 # All rights reserved.
 #
-# This software is free for non-commercial, research and evaluation use 
+# This software is free for non-commercial, research and evaluation use
 # under the terms of the LICENSE.md file.
 #
 # For inquiries contact  george.drettakis@inria.fr
@@ -30,7 +30,14 @@ add_library(CudaRasterizer
 	cuda_rasterizer/rasterizer.h
 )
 
+add_library(CudaRasterizerBind rasterize_points.h rasterize_points.cu render_equation.h render_equation.cu)
+
 set_target_properties(CudaRasterizer PROPERTIES CUDA_ARCHITECTURES "70;75;86")
+set_target_properties(CudaRasterizerBind PROPERTIES CUDA_ARCHITECTURES "70;75;86")
 
 target_include_directories(CudaRasterizer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/cuda_rasterizer)
 target_include_directories(CudaRasterizer PRIVATE third_party/glm ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+
+target_include_directories(CudaRasterizerBind PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/cuda_rasterizer)
+target_include_directories(CudaRasterizerBind PRIVATE third_party/glm ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+target_link_libraries(CudaRasterizerBind CudaRasterizer)
